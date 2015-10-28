@@ -1,4 +1,4 @@
-﻿package hia.mapred.pagerank;
+package hia.mapred.pagerank;
 
 public class PageRankDriver {
 	private static int times = 10; // 设置迭代次数

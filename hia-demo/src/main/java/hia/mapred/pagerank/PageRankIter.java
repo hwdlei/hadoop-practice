@@ -1,4 +1,4 @@
-﻿package hia.mapred.pagerank;
+package hia.mapred.pagerank;
 
 import java.io.IOException;
 

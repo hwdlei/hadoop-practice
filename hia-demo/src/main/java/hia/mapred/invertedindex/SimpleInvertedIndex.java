@@ -1,4 +1,4 @@
-﻿package hia.mapred.invertedindex;
+package hia.mapred.invertedindex;
 
 import java.io.IOException;
 import java.util.Iterator;
