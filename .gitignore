@@ -1,7 +1,4 @@
 hadoop
 .settings/
-/**/.classpath
 /**/target/
 /**/logs/
-.project
-
