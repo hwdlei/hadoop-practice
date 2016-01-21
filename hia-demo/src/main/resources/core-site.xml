@@ -5,7 +5,7 @@
 
 <configuration>
     <property>
-        <name>fs.default.name</name>
-        <value>hdfs://donglei1:9000</value>
+        <name>fs.defaultFS</name>
+        <value>hdfs://kafka04:8020</value>
     </property>
 </configuration>

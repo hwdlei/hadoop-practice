@@ -3,11 +3,11 @@ package hia.io;
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IOUtils;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.MapFile;
-import org.apache.hadoop.io.SequenceFile.CompressionType;
+import org.apache.hadoop.io.SequenceFile.Writer;
 import org.apache.hadoop.io.Text;
 
 /**
@@ -24,12 +24,11 @@ public class MapFileWriteDemo {
 	public static void main(String[] args) throws IOException {
 		String uri = "io/map";
 		Configuration conf = new Configuration();
-		FileSystem fs = FileSystem.get(conf);
 		MapFile.Writer writer = null;
 		IntWritable key = new IntWritable();
 		Text text = new Text();
 		try {
-			writer = new MapFile.Writer(conf, fs, uri, IntWritable.class, Text.class, CompressionType.BLOCK);
+			writer = new MapFile.Writer(conf,new Path(uri),Writer.bufferSize(1024));
 			for (int i = 0; i < 500; i++) {
 				key.set(i);
 				text.set(myValue[i % myValue.length]);

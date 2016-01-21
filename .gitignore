@@ -2,3 +2,4 @@ hadoop
 .settings/
 /**/target/
 /**/logs/
+/bin/
