@@ -45,7 +45,7 @@ public class WordConcurrnce {
 		 */
 		@Override
 		public void map(Text docName, BytesWritable docContent, Context context) throws IOException,
-				InterruptedException {
+		InterruptedException {
 			Matcher matcher = wordPattern.matcher(new String(docContent.getBytes(), "UTF-8"));
 			while (matcher.find()) {
 				windowQueue.add(matcher.group());
@@ -75,7 +75,7 @@ public class WordConcurrnce {
 	public static class WordConcurrenceReducer extends Reducer<WordPair, IntWritable, WordPair, IntWritable> {
 		@Override
 		public void reduce(WordPair wordPair, Iterable<IntWritable> frequence, Context context) throws IOException,
-				InterruptedException {
+		InterruptedException {
 			int sum = 0;
 			for (IntWritable val : frequence) {
 				sum += val.get();
@@ -85,7 +85,7 @@ public class WordConcurrnce {
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
-		Job wordConcurrenceJob = new Job();
+		Job wordConcurrenceJob = Job.getInstance();
 		wordConcurrenceJob.setJobName("wordConcurrenceJob");
 		wordConcurrenceJob.setJarByClass(WordConcurrnce.class);
 		wordConcurrenceJob.getConfiguration().setInt("window", Integer.parseInt(args[2]));

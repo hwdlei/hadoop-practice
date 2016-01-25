@@ -38,7 +38,7 @@ public class Dedup {
 		if (otherArgs.length != 2) {
 			System.err.println("Usage: Dedup <in> <out>");
 		}
-		Job job = new Job(conf, "Data deduplication");
+		Job job = Job.getInstance(conf, "Data deduplication");
 		job.setJarByClass(Dedup.class);
 
 		job.setMapperClass(DedupMap.class);

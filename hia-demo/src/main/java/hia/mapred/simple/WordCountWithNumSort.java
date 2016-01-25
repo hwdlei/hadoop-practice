@@ -38,7 +38,7 @@ public class WordCountWithNumSort {
 
 		@Override
 		public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException,
-				InterruptedException {
+		InterruptedException {
 			int sum = 0;
 			for (IntWritable val : values) {
 				sum += val.get();
@@ -67,7 +67,7 @@ public class WordCountWithNumSort {
 		Configuration conf = new Configuration();
 		conf.addResource("core-site.xml");
 		conf.addResource("hdfs-site.xml");
-		
+
 		String otherArgs[] = new GenericOptionsParser(conf, args).getRemainingArgs();
 		if (otherArgs.length != 2) {
 			System.err.println("Usage: wordcount <in> <out>");
@@ -79,7 +79,7 @@ public class WordCountWithNumSort {
 		//		conf.setIfUnset("mapreduce.output.compression.type", "BLOCK");
 		//		conf.setClass("mapreduce.output.compression.codec", GzipCodec.class, CompressionCodec.class);
 		try {
-			Job job = new Job(conf, "wordcount-1");
+			Job job = Job.getInstance(conf, "wordcount-1");
 			job.setJarByClass(WordCountWithNumSort.class);
 
 			job.setMapperClass(Mapper1.class);
@@ -103,7 +103,7 @@ public class WordCountWithNumSort {
 				System.exit(1);
 			}
 
-			Job job2 = new Job(conf, "wordcount 2");
+			Job job2 = Job.getInstance(conf, "wordcount 2");
 			job2.setJarByClass(WordCountWithNumSort.class);
 			job2.setMapperClass(InverseMapper.class);
 

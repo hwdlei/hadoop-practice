@@ -42,7 +42,7 @@ public class SingleTableJoin {
 	public static class STReducer extends Reducer<Text, Text, Text, Text> {
 		@Override
 		protected void reduce(Text key, Iterable<Text> values, Context context) throws IOException,
-				InterruptedException {
+		InterruptedException {
 			List<String> grandChilds = new ArrayList<String>();
 			List<String> grandParents = new ArrayList<String>();
 			for (Text value : values) {
@@ -70,7 +70,7 @@ public class SingleTableJoin {
 		if (otherArgs.length != 2) {
 			System.exit(1);
 		}
-		Job job = new Job(conf, "stjoin");
+		Job job = Job.getInstance(conf, "stjoin");
 		job.setJarByClass(SingleTableJoin.class);
 		job.setMapperClass(STMapper.class);
 		job.setReducerClass(STReducer.class);

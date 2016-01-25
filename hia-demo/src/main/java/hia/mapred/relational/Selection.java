@@ -37,7 +37,7 @@ public class Selection {
 		}
 	}
 	public void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
-		Job selectionJob = new Job();
+		Job selectionJob = Job.getInstance();
 		selectionJob.setJobName("selectionJob");
 		selectionJob.setJarByClass(Selection.class);
 		selectionJob.getConfiguration().setInt("col", Integer.parseInt(args[2]));

@@ -2,6 +2,7 @@ package hia.mapred.citation;
 
 import java.io.IOException;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -13,6 +14,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.util.GenericOptionsParser;
 
 
 /**
@@ -45,12 +47,17 @@ public class CitationCount {
 			}
 			// 输出key: 被引专利号；value: 被引次数
 			context.write(key, new IntWritable(count));
-		 }
+		}
 	}
 
 	public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
-		Job citationCountJob = new Job();
-		citationCountJob.setJobName("citationCountJob");
+		Configuration conf = new Configuration();
+		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
+		if (otherArgs.length != 2) {
+			System.err.println("Usage: citationCountJob <in> <out> <col>");
+			System.exit(1);
+		}
+		Job citationCountJob = Job.getInstance(conf, "citationCountJob");
 		citationCountJob.setJarByClass(CitationCount.class);
 
 		citationCountJob.setMapperClass(PatentCitationMapper.class);

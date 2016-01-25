@@ -29,16 +29,16 @@ public class Sort {
 	}
 
 	public static class SortReducer extends Reducer<IntWritable, IntWritable, IntWritable, IntWritable> {
-		private static IntWritable lineNum = new IntWritable(1);
 
+		@SuppressWarnings("unused")
 		@Override
 		protected void reduce(IntWritable key, Iterable<IntWritable> values, Context context) throws IOException,
-				InterruptedException {
+		InterruptedException {
 			Configuration conf = context.getConfiguration();
 			for(IntWritable value : values) {
 				int lineNum = conf.getInt(LINENUM, 1);
 				context.write(key, new IntWritable(lineNum));
-//				lineNum = new IntWritable(lineNum.get() + 1);
+				//				lineNum = new IntWritable(lineNum.get() + 1);
 				conf.setInt(LINENUM, lineNum + 1);
 			}
 		}
@@ -69,7 +69,7 @@ public class Sort {
 			System.err.println("Usage");
 			System.exit(1);
 		}
-		Job job = new Job(conf, "Sort");
+		Job job = Job.getInstance(conf, "Sort");
 		job.setJarByClass(Sort.class);
 		job.setMapperClass(SortMap.class);
 		job.setReducerClass(SortReducer.class);

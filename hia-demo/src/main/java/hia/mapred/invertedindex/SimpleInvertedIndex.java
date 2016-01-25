@@ -51,7 +51,7 @@ public class SimpleInvertedIndex {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		Job job = new Job(conf, "invert index");
+		Job job = Job.getInstance(conf, "invert index");
 		job.setJarByClass(SimpleInvertedIndex.class);
 		job.setInputFormatClass(TextInputFormat.class);
 		job.setMapperClass(InvertedIndexMapper.class);

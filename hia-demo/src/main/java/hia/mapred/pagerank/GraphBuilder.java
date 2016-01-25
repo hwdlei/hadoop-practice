@@ -147,7 +147,7 @@ public class GraphBuilder {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		Job job1 = new Job(conf, "Graph Builder");
+		Job job1 = Job.getInstance(conf, "Graph Builder");
 		job1.setJarByClass(GraphBuilder.class);
 		job1.setOutputKeyClass(Text.class);
 		job1.setOutputValueClass(Text.class);

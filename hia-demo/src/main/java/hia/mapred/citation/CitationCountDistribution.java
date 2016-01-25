@@ -2,6 +2,7 @@ package hia.mapred.citation;
 
 import java.io.IOException;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -12,6 +13,7 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.util.GenericOptionsParser;
 
 /**
  * 专利被引用次数分布统计，输入文件为专利引用次数统计的输出结果
@@ -30,7 +32,7 @@ public class CitationCountDistribution {
 				throws IOException, InterruptedException {
 			IntWritable citationCount = new IntWritable(Integer.parseInt(value.toString()));
 			context.write (citationCount, one);
-	     }
+		}
 	}
 
 	public static class ReduceClass extends Reducer<IntWritable,IntWritable,IntWritable,IntWritable>{
@@ -43,12 +45,19 @@ public class CitationCountDistribution {
 			}
 			// 输出key: 被引次数；value: 总出现次数
 			context.write(key, new IntWritable(count));
-			}
 		}
+	}
 
 	public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
-		Job citationCountDistributionJob = new Job();
-		citationCountDistributionJob.setJobName("citationCountDistributionJob");
+		Configuration conf = new Configuration();
+		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
+		if (otherArgs.length != 2) {
+			System.err.println("Usage: citationCountJob <in> <out> <col>");
+			System.exit(1);
+		}
+		Job citationCountDistributionJob = Job.getInstance(conf, "citationCountJob");
+
+
 		citationCountDistributionJob.setJarByClass(CitationCountDistribution.class);
 
 		citationCountDistributionJob.setMapperClass(MapClass.class);

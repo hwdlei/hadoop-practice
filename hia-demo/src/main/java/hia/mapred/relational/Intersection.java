@@ -46,7 +46,7 @@ public class Intersection {
 		}
 	}
 	public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
-		Job intersectionJob = new Job();
+		Job intersectionJob = Job.getInstance();
 		intersectionJob.setJobName("intersectionJob");
 		intersectionJob.setJarByClass(Intersection.class);
 

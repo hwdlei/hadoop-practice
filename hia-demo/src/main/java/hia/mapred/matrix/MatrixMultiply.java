@@ -132,7 +132,7 @@ public class MatrixMultiply {
 		conf.setInt("columnM", columnM);
 		conf.setInt("columnN", columnN);
 
-		Job job = new Job(conf, "MatrixMultiply");
+		Job job = Job.getInstance(conf, "MatrixMultiply");
 		job.setJarByClass(MatrixMultiply.class);
 		job.setMapperClass(MatrixMapper.class);
 		job.setReducerClass(MatrixReducer.class);

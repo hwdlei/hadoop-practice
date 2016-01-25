@@ -43,7 +43,7 @@ public class Projection {
 		}
 	}
 	public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
-		Job projectionJob = new Job();
+		Job projectionJob = Job.getInstance();
 		projectionJob.setJobName("projectionJob");
 		projectionJob.setJarByClass(Projection.class);
 		projectionJob.getConfiguration().setInt("col", Integer.parseInt(args[2]));

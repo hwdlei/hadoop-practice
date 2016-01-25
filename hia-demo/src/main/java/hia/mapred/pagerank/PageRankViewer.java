@@ -45,7 +45,7 @@ public class PageRankViewer {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		Job job3 = new Job(conf, "PageRankViewer");
+		Job job3 = Job.getInstance(conf, "PageRankViewer");
 		job3.setJarByClass(PageRankViewer.class);
 		job3.setOutputKeyClass(FloatWritable.class);
 		job3.setSortComparatorClass(DescFloatComparator.class);

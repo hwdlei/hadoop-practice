@@ -11,7 +11,6 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.filecache.DistributedCache;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -78,23 +77,30 @@ public class InvertedIndexer {
 
 	public static class InvertedIndexMapper extends Mapper<Text, Text, Text, IntWritable> {
 		private Set<String> stopwords;
-		private Path[] localFiles;
+		private URI[] localFiles;
 		private String pattern = "[^\\w]"; // 正则表达式，代表不是0-9, a-z, A-Z,的所有其它字
 
 		@Override
-		public void setup(Context context) throws IOException, InterruptedException {
+		public void setup(Context context) throws InterruptedException {
 			stopwords = new TreeSet<String>();
-			Configuration conf = context.getConfiguration();
-			localFiles = DistributedCache.getLocalCacheFiles(conf); // 获得停词表
-			for (int i = 0; i < localFiles.length; i++) {
+			try {
+				localFiles = context.getCacheFiles();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} // 获得停词表
+			for (URI localFile : localFiles) {
 				String line;
-				BufferedReader br = new BufferedReader(new FileReader(localFiles[i].toString()));
-				while ((line = br.readLine()) != null) {
-					StringTokenizer itr = new StringTokenizer(line);
-					while (itr.hasMoreTokens()) {
-						stopwords.add(itr.nextToken());
+				try (BufferedReader br = new BufferedReader(new FileReader(localFile.toString()))){
+					while ((line = br.readLine()) != null) {
+						StringTokenizer itr = new StringTokenizer(line);
+						while (itr.hasMoreTokens()) {
+							stopwords.add(itr.nextToken());
+						}
 					}
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
+
 			}
 		}
 
@@ -123,7 +129,7 @@ public class InvertedIndexer {
 
 		@Override
 		public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException,
-				InterruptedException {
+		InterruptedException {
 			int sum = 0;
 			for (IntWritable val : values) {
 				sum += val.get();
@@ -152,7 +158,7 @@ public class InvertedIndexer {
 
 		@Override
 		public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException,
-				InterruptedException {
+		InterruptedException {
 			int sum = 0;
 			word1.set(key.toString().split("#")[0]);
 			temp = key.toString().split("#")[1];
@@ -199,8 +205,8 @@ public class InvertedIndexer {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		DistributedCache.addCacheFile(new URI("hdfs://master01:54310/user/2014st08/stop-words.txt"), conf);// 设置停词列表文档作为当前作业的缓存文件
-		Job job = new Job(conf, "inverted index");
+		Job job = Job.getInstance(conf, "inverted index");
+		job.addCacheFile(new URI("hdfs://master01:54310/user/2014st08/stop-words.txt"));
 		job.setJarByClass(InvertedIndexer.class);
 
 		job.setInputFormatClass(FileNameInputFormat.class);

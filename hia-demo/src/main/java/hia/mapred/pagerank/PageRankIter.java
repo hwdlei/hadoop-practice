@@ -60,7 +60,7 @@ public class PageRankIter {
 
 	public static void main(String[] args) throws Exception {
 		Configuration conf = new Configuration();
-		Job job2 = new Job(conf, "PageRankIter");
+		Job job2 = Job.getInstance(conf, "PageRankIter");
 		job2.setJarByClass(PageRankIter.class);
 		job2.setOutputKeyClass(Text.class);
 		job2.setOutputValueClass(Text.class);

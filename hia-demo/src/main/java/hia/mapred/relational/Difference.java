@@ -21,8 +21,8 @@ public class Difference {
 		public void map(Text relationName, BytesWritable content, Context context)throws
 		IOException, InterruptedException{
 			String[] records = new String(content.getBytes(),"UTF-8").split("\\n");
-			for(int i = 0; i < records.length; i++){
-				RelationA record = new RelationA(records[i]);
+			for (String record2 : records) {
+				RelationA record = new RelationA(record2);
 				context.write(record, relationName);
 			}
 		}
@@ -46,7 +46,7 @@ public class Difference {
 		}
 	}
 	public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
-		Job differenceJob = new Job();
+		Job differenceJob = Job.getInstance();
 		differenceJob.setJobName("differenceJob");
 		differenceJob.setJarByClass(Difference.class);
 		differenceJob.getConfiguration().set("setR", args[2]);

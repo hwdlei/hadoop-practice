@@ -31,8 +31,8 @@ public class NaturalJoin {
 		public void map(Text relationName, BytesWritable content, Context context)throws
 		IOException, InterruptedException{
 			String[] records = new String(content.getBytes(),"UTF-8").split("\\n");
-			for(int i = 0; i < records.length; i++){
-				RelationA record = new RelationA(records[i]);
+			for (String record2 : records) {
+				RelationA record = new RelationA(record2);
 				context.write(new Text(record.getCol(col)),
 						new Text(relationName.toString() + " " + record.getValueExcept(col)));
 			}
@@ -68,7 +68,7 @@ public class NaturalJoin {
 		}
 	}
 	public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException{
-		Job naturalJoinJob = new Job();
+		Job naturalJoinJob = Job.getInstance();
 		naturalJoinJob.setJobName("naturalJoinJob");
 		naturalJoinJob.setJarByClass(NaturalJoin.class);
 		naturalJoinJob.getConfiguration().setInt("col", Integer.parseInt(args[2]));
